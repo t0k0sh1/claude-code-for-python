@@ -14,10 +14,9 @@ def add(a: int | float, b: int | float) -> int | float:
     if a is None or b is None:
         raise ValueError("Arguments cannot be None")
 
-    if isinstance(a, bool) or isinstance(b, bool):
-        raise ValueError("Arguments must be numeric")
-
-    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+    if not (isinstance(a, (int, float)) and not isinstance(a, bool)) or not (
+        isinstance(b, (int, float)) and not isinstance(b, bool)
+    ):
         raise ValueError("Arguments must be numeric")
 
     return a + b
