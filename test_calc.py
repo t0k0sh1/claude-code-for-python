@@ -5,61 +5,91 @@ from calc import add
 class TestAdd:
     """Test suite for the add function."""
 
-    def test_add_positive_numbers(self):
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (2, 3, 5),
+            (10, 20, 30),
+            (100, 200, 300),
+        ],
+    )
+    def test_add_positive_numbers(self, a, b, expected):
         """Test adding two positive numbers."""
-        assert add(2, 3) == 5
-        assert add(10, 20) == 30
-        assert add(100, 200) == 300
+        assert add(a, b) == expected
 
-    def test_add_negative_numbers(self):
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (-2, -3, -5),
+            (-10, -20, -30),
+            (-100, -200, -300),
+        ],
+    )
+    def test_add_negative_numbers(self, a, b, expected):
         """Test adding negative numbers."""
-        assert add(-2, -3) == -5
-        assert add(-10, -20) == -30
-        assert add(-100, -200) == -300
+        assert add(a, b) == expected
 
-    def test_add_mixed_numbers(self):
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (10, -5, 5),
+            (-10, 5, -5),
+            (100, -100, 0),
+        ],
+    )
+    def test_add_mixed_numbers(self, a, b, expected):
         """Test adding positive and negative numbers."""
-        assert add(10, -5) == 5
-        assert add(-10, 5) == -5
-        assert add(100, -100) == 0
+        assert add(a, b) == expected
 
-    def test_add_floats(self):
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (1.5, 2.5, 4.0),
+            (0.1, 0.2, pytest.approx(0.3)),
+            (-1.5, 2.5, 1.0),
+        ],
+    )
+    def test_add_floats(self, a, b, expected):
         """Test adding floating point numbers."""
-        assert add(1.5, 2.5) == 4.0
-        assert add(0.1, 0.2) == pytest.approx(0.3)
-        assert add(-1.5, 2.5) == 1.0
+        assert add(a, b) == expected
 
-    def test_add_with_zero(self):
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            (0, 0, 0),
+            (5, 0, 5),
+            (0, 5, 5),
+            (-5, 0, -5),
+        ],
+    )
+    def test_add_with_zero(self, a, b, expected):
         """Test adding with zero."""
-        assert add(0, 0) == 0
-        assert add(5, 0) == 5
-        assert add(0, 5) == 5
-        assert add(-5, 0) == -5
+        assert add(a, b) == expected
 
-    def test_add_none_raises_value_error(self):
+    @pytest.mark.parametrize(
+        "a, b",
+        [
+            (None, 5),
+            (5, None),
+            (None, None),
+        ],
+    )
+    def test_add_none_raises_value_error(self, a, b):
         """Test that None arguments raise ValueError."""
         with pytest.raises(ValueError, match="Arguments cannot be None"):
-            add(None, 5)
-        
-        with pytest.raises(ValueError, match="Arguments cannot be None"):
-            add(5, None)
-        
-        with pytest.raises(ValueError, match="Arguments cannot be None"):
-            add(None, None)
+            add(a, b)
 
-    def test_add_non_numeric_raises_value_error(self):
+    @pytest.mark.parametrize(
+        "a, b",
+        [
+            ("5", 3),
+            (5, "3"),
+            ([1, 2], 3),
+            (5, {"a": 1}),
+            (True, 5),  # bool is not included in our numeric types
+        ],
+    )
+    def test_add_non_numeric_raises_value_error(self, a, b):
         """Test that non-numeric arguments raise ValueError."""
         with pytest.raises(ValueError, match="Arguments must be numeric"):
-            add("5", 3)
-        
-        with pytest.raises(ValueError, match="Arguments must be numeric"):
-            add(5, "3")
-        
-        with pytest.raises(ValueError, match="Arguments must be numeric"):
-            add([1, 2], 3)
-        
-        with pytest.raises(ValueError, match="Arguments must be numeric"):
-            add(5, {"a": 1})
-        
-        with pytest.raises(ValueError, match="Arguments must be numeric"):
-            add(True, 5)  # bool is not included in our numeric types
+            add(a, b)

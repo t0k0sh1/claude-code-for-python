@@ -1,4 +1,4 @@
-def add(a, b):
+def add(a: int | float, b: int | float) -> int | float:
     """Add two numbers together.
 
     Args:
@@ -13,11 +13,11 @@ def add(a, b):
     """
     if a is None or b is None:
         raise ValueError("Arguments cannot be None")
-    
+
     if isinstance(a, bool) or isinstance(b, bool):
         raise ValueError("Arguments must be numeric")
-    
+
     if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
         raise ValueError("Arguments must be numeric")
-    
+
     return a + b
